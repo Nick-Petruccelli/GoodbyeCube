@@ -96,6 +96,12 @@ void adc_init() {
 
   // Sampling time
   ADC1->SMPR2 |= (3 << (3 * 0)) | (3 << (3 * 1));
+
+  // Enable ADC
+  ADC1->CR2 |= ADC_CR2_ADON;
+
+  // Start continuous conversion via software
+  ADC1->CR2 |= ADC_CR2_SWSTART;
 }
 
 void dma_init() {
@@ -156,6 +162,8 @@ void deley_ms(uint32_t ms) {
 
 int main() {
   clock_init();
+  adc_init();
+  dma_init();
   SysTick_Config(180000);
   __enable_irq();
 
@@ -165,8 +173,21 @@ int main() {
 
   GPIOA->MODER |= (1 << GPIO_MODER_MODER5_Pos);
 
+  uint16_t x_max = 0;
+  uint16_t x_min = 65535;
+  uint16_t y_max = 0;
+  uint16_t y_min = 65535;
+
   while (1) {
-    GPIOA->ODR ^= (1 << LED_PIN);
-    deley_ms(1000);
+    if (adc_buff[0] > x_max)
+      x_max = adc_buff[0];
+    if (adc_buff[0] < x_min)
+      x_min = adc_buff[0];
+    if (adc_buff[1] > y_max)
+      y_max = adc_buff[1];
+    if (adc_buff[1] < y_min)
+      y_min = adc_buff[1];
+    // GPIOA->ODR ^= (1 << LED_PIN);
+    // deley_ms(1000);
   }
 }
