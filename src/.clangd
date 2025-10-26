@@ -1,0 +1,6 @@
+CompileFlags:
+  Add: [
+    "-DSTM32F410Rx",
+    "-I../vendor/CMSIS/Devices/STM32F4/Include",
+    "-I../vendor/CMSIS/CMSIS/Core/Include",
+  ]
