@@ -7,12 +7,12 @@ extern uint32_t _etext, _sdata, _edata, _sbss, _ebss;
 #define SRAM_END (SRAM_START + SRAM_SIZE)
 #define STACK_POINTER_INIT_ADD (SRAM_END)
 
-#define IST_VECTOR_SIZE_WORDS 112
+#define IST_VECTOR_SIZE_WORDS 113
 
 void main(void);
 
 void reset_handler(void);
-void default_handelr(void);
+void default_handler(void);
 void nmi_handler(void) __attribute__((weak, alias("default_handler")));
 void hard_fault_handler(void) __attribute__((weak, alias("default_handler")));
 void mem_manage_handler(void) __attribute__((weak, alias("default_handler")));
@@ -128,6 +128,9 @@ uint32_t isr_vector[IST_VECTOR_SIZE_WORDS] __attribute__((
                                 (uintptr_t)&bus_fault_handler,
                                 (uintptr_t)&usage_fault_handler,
                                 0,
+                                0,
+                                0,
+                                0,
                                 (uintptr_t)&svcall_handler,
                                 (uintptr_t)&debug_moniter_handler,
                                 0,
@@ -231,7 +234,10 @@ uint32_t isr_vector[IST_VECTOR_SIZE_WORDS] __attribute__((
                                 (uintptr_t)&fmpi2c1_handler,
                                 (uintptr_t)&fmpi2c1_error_handler};
 
-void default_handler(void) {}
+void default_handler(void) {
+  while (1)
+    ;
+}
 
 void reset_handler(void) {
   uint8_t *flash_data = (uint8_t *)&_etext;

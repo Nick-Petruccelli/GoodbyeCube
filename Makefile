@@ -1,5 +1,5 @@
 CC= arm-none-eabi-gcc
-CFLAGS= -mcpu=cortex-m4 -mthumb -nostdlib
+CFLAGS= -mcpu=cortex-m4 -mthumb -nostdlib -g
 CPPFLAGS=-DSTM32F410Rx \
 	 -Ivendor/CMSIS/Devices/STM32F4/Include \
 	 -Ivendor/CMSIS/CMSIS/Core/Include
